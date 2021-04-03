@@ -6,7 +6,7 @@ jcmd - command line version of jmc
 jcmd <pid> help
 jcmd <pid> VM.flags
 
-# Changing a flag at runtime - only do if the flag is marked manageable.
+## Changing a flag at runtime - only do if the flag is marked manageable.
 jcmd <pid> VM.set_flag CMSWaitDuration 1500
 
 # Thread - Runnable, Blocked (lock), Waiting/Timed_Waiting
