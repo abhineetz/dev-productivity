@@ -117,4 +117,21 @@ ii) Can produce 10x reduction in pause times with only 10% throughput decrease.
 2. -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=10M
 
 >> GC tuning
-TBD...........
+1. Adaptive sizing:- (-Xms and -Xmx flags) - When these flags are used JVM adapts the heap size based on size of live objects in the heap. So, the size will grow and shrink as the live objects increase and decrease.
+2. Turn of adaptive sizing:- -XX:-UseAdaptiveSizePolicy and seting the min and max heap size same.
+General recommendation : Heap should be 30% occupied after a full GC.
+3. MaxGCPause:- -XX:MaxGCPauseMillis=350
+G1GC has default value of 200ms for this flag.
+4. Concurrent GC errors, when GC threads and application threads are running concurrently and application is producing objects at a rate faster than what GC could collect.
+..* Concurrent mode failure:-
+..* Promotion failure:-
+..* Evacuation failure:-
+
+Solution is to reduce the threshold at which G1 cycle is triggered. 
+-XX:InitiatingHeapOccupancyPercent=45 (Default)
+
+Or Increase number of concurrent threads
+-XX:ConcGCThreads=4
+
+Or Increase Heap size.
+
