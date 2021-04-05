@@ -123,9 +123,9 @@ General recommendation : Heap should be 30% occupied after a full GC.
 3. MaxGCPause:- -XX:MaxGCPauseMillis=350
 G1GC has default value of 200ms for this flag.
 4. Concurrent GC errors, when GC threads and application threads are running concurrently and application is producing objects at a rate faster than what GC could collect.
-	i. Concurrent mode failure:-
-	ii. Promotion failure:-
-	iii. Evacuation failure:-
+	1. Concurrent mode failure:-
+	2. Promotion failure:-
+	3. Evacuation failure:-
 
 Solution is to reduce the threshold at which G1 cycle is triggered. 
 -XX:InitiatingHeapOccupancyPercent=45 (Default)
