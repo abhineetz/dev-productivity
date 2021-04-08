@@ -79,41 +79,41 @@ This can be achieved in JMC GUI -> MBean server -> Triggers -> set trigger
 >> Young generation is divided into Eden & Survivor space (S0, S1). Objects are created in Eden space, when eden fills up minor GC takes place and surviving objects are aged incremented and moved to the empty survivor space say S1. The other survior space S0 objects are also age incremented; if they cross threshold they are moved to Old generation; remaining objects from S0 are copied to S1. Now S0 and eden space memory is cleared. This process continues with each minor GC and objects are moved between survivor spaces and tenured objects are moved to old generation. Eventually the old generation will become full and need GC, called major or full GC. It takes more time as the old generation space is large and holds large number of objects.
 
 > Throughput definition w.r.t. GC:- The percentage of time spent in doing application work vs GC.
-
->>Basic Collectors:- Parallel collector
+>
+####Basic Collectors:- Parallel collector
 * Stop all application threads
 * Mark unreachable objects
 * Free the memory
 * Compact the heap
 * Resume application threads.
 
->>Advanced/Concurrent collectors/low pause collectors - CMS, G1GC
+####Advanced/Concurrent collectors/low pause collectors - CMS, G1GC
 * Scan unreachable objects while the application is still running
 * Only pause app threads to free the memory and compact the heap
 
->>Choosing a GC
+####Choosing a GC
 * Serial GC:- -XX:+UseSerialGC
-i) Single CPU available
-ii) Multiple small jvms, more than the number of CPU's available
-iii) Small live data set up to 100MB
+1. Single CPU available
+2. Multiple small jvms, more than the number of CPU's available
+3. Small live data set up to 100MB
 
 * Parallel GC:- -XX:+UseParallelGC
-i) Uses multiple threads to process the heap
-ii) Fully stops all application threads which can result in _*long pause times but provides higher throughput*_.
-iii) Suitable for batch type applications where throughput is more important than low pause time.
+1. Uses multiple threads to process the heap
+2. Fully stops all application threads which can result in **long pause times but provides higher throughput**.
+3. Suitable for batch type applications where throughput is more important than low pause time.
 
 * CMS collector:- Deprecated and replaced by G1GC
-i) Traces reachable and unreachable objects while application threads are running.
-ii) Since GC threads are running concurrently with application threads, they compete for CPU and could affect the throughput.
+1. Traces reachable and unreachable objects while application threads are running.
+2. Since GC threads are running concurrently with application threads, **they compete for CPU and could affect the throughput.**
 
 * G1GC - CMS replacement, default for > java 9 -XX:+UseG1GC
-i) Designed for multiprocessor machines with large heaps. Tries to achieve the best balance between throughput and latency.
-ii) Similar to CMS, it could affect throughput.
-iii) Suitable for interactive applications with low pause time requirement.
+1. Designed for multiprocessor machines with large heaps. Tries to achieve the best balance between throughput and latency.
+2. Similar to CMS, it could affect throughput.
+3. Suitable for interactive applications with low pause time requirement.
 
 * Shenandoah collector-
-i) Can mark unreachable objects and move unreachable objects concurrently while application threads are running.
-ii) Can produce 10x reduction in pause times with only 10% throughput decrease.
+1. Can mark unreachable objects and move unreachable objects concurrently while application threads are running.
+2. Can produce 10x reduction in pause times with only 10% throughput decrease.
 
 >> GC logging flags:
 1. -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:<file path>
