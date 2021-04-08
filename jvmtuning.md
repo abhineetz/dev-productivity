@@ -46,15 +46,15 @@ This can be achieved in JMC GUI -> MBean server -> Triggers -> set trigger
 >>3. Tiered Compilation:- For long lived apps, tiered compilation approach could be used. The application first starts up and executes the bytecode in interpreted mode. After a few runs C1 compiler identifies and compiles hot methods. As the methods become more hotter, they can then be compied with C2 compiler. Java 8 by default uses tiered compilation.
 >>>
 >>>Tiered compiliation levels are:-
->>>Level 0 – interpreted code.
->>>Level 1 – C1 compiled code with no profiling
->>>Level 2 – C1 compiled code with light profiling
->>>Level 3 – C1 compiled code with full profiling
->>>Level 4 – C2 compiled code (uses profile data from the previous steps)
+>>>1. Level 0 – interpreted code.
+>>>2. Level 1 – C1 compiled code with no profiling
+>>>3. Level 2 – C1 compiled code with light profiling
+>>>4. Level 3 – C1 compiled code with full profiling
+>>>5. Level 4 – C2 compiled code (uses profile data from the previous steps)
 
->#### Hotspot method are determined using below two parameters:-
->1. Invocation counter:- number of times method has been invoked.
->2. Backedge counter:- number of times any loops in a method have branched back. Branch back means either a loop completed execution or it was cut short using a continue statement.
+#### Hotspot method are identified using the algorithm based on below two parameters:-
+1. Invocation counter:- number of times method has been invoked.
+2. Backedge counter:- number of times any loops in a method have branched back. Branch back means either a loop completed execution or it was cut short using a continue statement.
 
 #### JVM JIT compiler tuning flags
 1. C1 compiler:- -XX:TieredStopAtLevel=1
@@ -71,16 +71,16 @@ This can be achieved in JMC GUI -> MBean server -> Triggers -> set trigger
 -XX:ReservedCodeCacheSize=<N>
 
 #### Garbage Collection
->Generational GC - Based on young and old generation.
->1. Serial: -XX:+UseSerialGC
->2. Parallel 
->3. CMS
->4. Garbage First (G1GC)
->> Young generation is divided into Eden & Survivor space (S0, S1). Objects are created in Eden space, when eden fills up minor GC takes place and surviving objects are aged incremented moved to the empty survivor space say S1. The other survior space S0 objects are also age incremented; if they cross threshold they are moved to Old generation; remaining objects from S0 are copied to S1. Now S0 and eden space memory is cleared. This process continues with each minor GC and objects are moved between survivor spaces. Eventually the old generation will become full and need GC, called major or full GC. It takes more time as the old generation space is large and holds large number of objects.
+>Generational GC:- Based on young and old generation.
+>1. Serial:- -XX:+UseSerialGC
+>2. Parallel:- 
+>3. CMS:-
+>4. Garbage First (G1GC):-
+>> Young generation is divided into Eden & Survivor space (S0, S1). Objects are created in Eden space, when eden fills up minor GC takes place and surviving objects are aged incremented and moved to the empty survivor space say S1. The other survior space S0 objects are also age incremented; if they cross threshold they are moved to Old generation; remaining objects from S0 are copied to S1. Now S0 and eden space memory is cleared. This process continues with each minor GC and objects are moved between survivor spaces and tenured objects are moved to old generation. Eventually the old generation will become full and need GC, called major or full GC. It takes more time as the old generation space is large and holds large number of objects.
 
-> Throughput definition w.r.t. GC - The ration of time spent in doing application work vs GC.
+> Throughput definition w.r.t. GC:- The percentage of time spent in doing application work vs GC.
 
->>Basic Collectors - Parallel collector
+>>Basic Collectors:- Parallel collector
 * Stop all application threads
 * Mark unreachable objects
 * Free the memory
@@ -94,12 +94,12 @@ This can be achieved in JMC GUI -> MBean server -> Triggers -> set trigger
 >>Choosing a GC
 * Serial GC:- -XX:+UseSerialGC
 i) Single CPU available
-ii) multiple small jvms, more than the number of CPU's available
+ii) Multiple small jvms, more than the number of CPU's available
 iii) Small live data set up to 100MB
 
 * Parallel GC:- -XX:+UseParallelGC
 i) Uses multiple threads to process the heap
-ii) Fully stops all application threads which can result in long pause times but provides higher throughput.
+ii) Fully stops all application threads which can result in _*long pause times but provides higher throughput*_.
 iii) Suitable for batch type applications where throughput is more important than low pause time.
 
 * CMS collector:- Deprecated and replaced by G1GC
