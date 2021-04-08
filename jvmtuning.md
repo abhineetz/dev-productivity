@@ -37,20 +37,20 @@ This can be achieved in JMC GUI -> MBean server -> Triggers -> set trigger
 >3. Intermediate languages:- Translates program code to intermediate bytecode, then a VM/JVM can interpret that bytecode. Benefits are that compiler can perform type checks and optimizations. Portability is also achieved. Performance of interpreted bytecode lags behind compiled code.
 >To overcome this JIT compiler was introduced in 1999. JIT compiler identifies the hotspots in an application during runtime and compiles bytecode to machine instructions so that the hot methods/classes are available in machine instructions and execute pretty fast. 
 >
->JIT - has 2 compilation modes:-
->1. C1 - client compiler:- Optimized for fast start up applications and optimizes the hotspot methods early on and compiles them to machine code.
->2. C2 - server compiler:- Waits longer period of time for hotspot method optimizations. The longer wait means more accurate patterns can be applied to identify hot methods and optimizations can be more aggressive. Hence, methods compiled with C2 are faster than those compiled with C1.
->
->Application running with C1 will be faster early on. While C2 compiled applications will catch up later and overtake C1. Hence, C1 should be used for short lived applications and C2 for long lived apps.
->
->3. Tiered Compilation:- For long lived apps, tiered compilation approach could be used. The application first starts up and executes the bytecode in interpreted mode. After a few runs C1 compiler identifies and compiles hot methods. As the methods become more hotter, they can then be compied with C2 compiler. Java 8 by default uses tiered compilation.
-
-Tiered compiliation levels are:-
-Level 0 – interpreted code.
-Level 1 – C1 compiled code with no profiling
-Level 2 – C1 compiled code with light profiling
-Level 3 – C1 compiled code with full profiling
-Level 4 – C2 compiled code (uses profile data from the previous steps)
+>>JIT - has 2 compilation modes:-
+>>1. C1 - client compiler:- Optimized for fast start up applications and optimizes the hotspot methods early on and compiles them to machine code.
+>>2. C2 - server compiler:- Waits longer period of time for hotspot method optimizations. The longer wait means more accurate patterns can be applied to identify hot methods and optimizations can be more aggressive. Hence, methods compiled with C2 are faster than those compiled with C1.
+>>
+>>Application running with C1 will be faster early on. While C2 compiled applications will catch up later and overtake C1. Hence, C1 should be used for short lived applications and C2 for long lived apps.
+>>
+>>3. Tiered Compilation:- For long lived apps, tiered compilation approach could be used. The application first starts up and executes the bytecode in interpreted mode. After a few runs C1 compiler identifies and compiles hot methods. As the methods become more hotter, they can then be compied with C2 compiler. Java 8 by default uses tiered compilation.
+>>>
+>>>Tiered compiliation levels are:-
+>>>Level 0 – interpreted code.
+>>>Level 1 – C1 compiled code with no profiling
+>>>Level 2 – C1 compiled code with light profiling
+>>>Level 3 – C1 compiled code with full profiling
+>>>Level 4 – C2 compiled code (uses profile data from the previous steps)
 
 >#### Hotspot method are determined using below two parameters:-
 >1. Invocation counter:- number of times method has been invoked.
