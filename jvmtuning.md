@@ -1,42 +1,41 @@
-# Java mission control
-jmc - java mission control gui
+#Java Performance analysis, tuning and optimization
 
+#### Command line tools
+jmc - java mission control gui
 
 jcmd - command line version of jmc
 jcmd <pid> help
 jcmd <pid> VM.flags
 
 #### Changing a flag at runtime - only do if the flag is marked manageable.
-jcmd <pid> VM.set_flag CMSWaitDuration 1500
+1. jcmd <pid> VM.set_flag CMSWaitDuration 1500
 
-#### Thread - Runnable, Blocked (lock), Waiting/Timed_Waiting
-jcmd <pid> Thread.print | less
+#### Thread states - Runnable, Blocked (lock), Waiting/Timed_Waiting
+1. jcmd <pid> Thread.print | less
 
 #### Memory
-jcmd <pid> GC.heap_info
-
-jcmd <pid> GC.class_histogram | less
-
-jcmd <pid> GC.heap_dump 
+1. jcmd <pid> GC.heap_info
+2. jcmd <pid> GC.class_histogram | less
+3. jcmd <pid> GC.heap_dump 
 
 #### Java flight recorder
-jmcd <pid> JFR.start setting=default name=Recording maxage=4h
+1. jmcd <pid> JFR.start setting=default name=Recording maxage=4h
 
-Jump recording based on a trigger - cpu usage, deadlock etc
-In JMC, MBean server > Triggers > set trigger
+2. Start JFR recording based on a trigger like cpu usage, deadlock etc.
+This can be achieved in JMC GUI -> MBean server -> Triggers -> set trigger
 
-#### JMC creates an automatic analysis report from JFR recording
-1. hot classes/ methods
-2. Memory tab - shows which objects are most created. Shows allocation rates by time sample. Shows GC pause time.
+#### JMC GUI creates an automatic analysis report from JFR recording
+1. Hot classes/ methods - As the name suggests these are invoked very often.
+2. Memory tab - Shows object instances by decending order. Shows object allocation rates by time sample. Shows GC pause time.
 3. GC tab - New GC, Old GC times.
-4. Threads - 
-5. Lock instances - blocked threads, how log, how much time etc
+4. Threads - Shows all application threads and their states.
+5. Lock instances - Shows blocked threads and for how long.
 
-#### Compilers and interpreters
-1. Compiled languages:- Transforms program code to binary instructions for specific CPU architecture and are optimized for that CPU.
-2. Interpreted languages:- Translates each line of code into binary instructions as the line is executed. Interpreted languages are portable across CPU architectures. But are not as fast as compiled languages.
-3. Intermediate languages:- Translates program code to intermediate bytecode, then a JVM/VM can interpret that bytecode. Benefits are that compiler can perform type checks and optimizations. Portability is also achieved. Performance of interpreted bytecode lags behind compiled code.
-To overcome this JIT was introduced in 1999. JIT compiler identifies the hotspots in an application during runtime and compiles bytecode to machine instructions so that the program can run fast.
+>#### Compilers and interpreters
+>1. Compiled languages:- Transforms program code to binary instructions for specific CPU architecture and are optimized for that CPU.
+>2. Interpreted languages:- Translates each line of code into binary instructions as the line is executed. Interpreted languages are portable across CPU architectures. But are not as fast as compiled languages.
+>3. Intermediate languages:- Translates program code to intermediate bytecode, then a JVM/VM can interpret that bytecode. Benefits are that compiler can perform type checks and optimizations. Portability is also achieved. Performance of interpreted bytecode lags behind compiled code.
+>To overcome this JIT was introduced in 1999. JIT compiler identifies the hotspots in an application during runtime and compiles bytecode to machine instructions so that the program can run fast.
 
 JIT - has 2 compilation modes:-
 1. C1 - client compiler - Optimized for fast start up applications and optimizes the hotspot methods early on and compiles them to machine code.
