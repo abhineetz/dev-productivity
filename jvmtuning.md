@@ -78,8 +78,8 @@ This can be achieved in JMC GUI -> MBean server -> Triggers -> set trigger
 >4. Garbage First (G1GC):-
 >> Young generation is divided into Eden & Survivor space (S0, S1). Objects are created in Eden space, when eden fills up minor GC takes place and surviving objects are aged incremented and moved to the empty survivor space say S1. The other survior space S0 objects are also age incremented; if they cross threshold they are moved to Old generation; remaining objects from S0 are copied to S1. Now S0 and eden space memory is cleared. This process continues with each minor GC and objects are moved between survivor spaces and tenured objects are moved to old generation. Eventually the old generation will become full and need GC, called major or full GC. It takes more time as the old generation space is large and holds large number of objects.
 
-> Throughput definition w.r.t. GC:- The percentage of time spent in doing application work vs GC.
->
+Throughput definition w.r.t. GC:- The percentage of time spent in doing application work vs GC.
+
 ####Basic Collectors:- Parallel collector
 * Stop all application threads
 * Mark unreachable objects
@@ -115,11 +115,11 @@ This can be achieved in JMC GUI -> MBean server -> Triggers -> set trigger
 1. Can mark unreachable objects and move unreachable objects concurrently while application threads are running.
 2. Can produce 10x reduction in pause times with only 10% throughput decrease.
 
->> GC logging flags:
+####GC logging flags:
 1. -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:<file path>
 2. -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=10M
 
->> GC tuning
+####GC tuning
 1. Adaptive sizing:- (-Xms and -Xmx flags) - When these flags are used JVM adapts the heap size based on size of live objects in the heap. So, the size will grow and shrink as the live objects increase and decrease.
 2. Turn of adaptive sizing:- -XX:-UseAdaptiveSizePolicy and seting the min and max heap size same.
 General recommendation : Heap should be 30% occupied after a full GC.
