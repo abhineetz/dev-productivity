@@ -25,48 +25,52 @@ jcmd <pid> VM.flags
 This can be achieved in JMC GUI -> MBean server -> Triggers -> set trigger
 
 #### JMC GUI creates an automatic analysis report from JFR recording
-1. Hot classes/ methods - As the name suggests these are invoked very often.
-2. Memory tab - Shows object instances by decending order. Shows object allocation rates by time sample. Shows GC pause time.
-3. GC tab - New GC, Old GC times.
-4. Threads - Shows all application threads and their states.
-5. Lock instances - Shows blocked threads and for how long.
+1. Hot classes/ methods:- As the name suggests these are invoked very often.
+2. Memory tab:- Shows object instances by decending order. Shows object allocation rates by time sample. Shows GC pause time.
+3. GC tab:- New GC, Old GC times.
+4. Threads:- Shows all application threads and their states.
+5. Lock instances:- Shows blocked threads and for how long.
 
 >#### Compilers and interpreters
->1. Compiled languages:- Transforms program code to binary instructions for specific CPU architecture and are optimized for that CPU.
->2. Interpreted languages:- Translates each line of code into binary instructions as the line is executed. Interpreted languages are portable across CPU architectures. But are not as fast as compiled languages.
->3. Intermediate languages:- Translates program code to intermediate bytecode, then a JVM/VM can interpret that bytecode. Benefits are that compiler can perform type checks and optimizations. Portability is also achieved. Performance of interpreted bytecode lags behind compiled code.
->To overcome this JIT was introduced in 1999. JIT compiler identifies the hotspots in an application during runtime and compiles bytecode to machine instructions so that the program can run fast.
-
+>1. Compiled languages:- Transforms program code to machine instructions for specific CPU architecture and are optimized for that CPU.
+>2. Interpreted languages:- Translates each line of code into machine instructions as the line is executed. Interpreted languages are portable across CPU architectures. But are not as fast as compiled languages.
+>3. Intermediate languages:- Translates program code to intermediate bytecode, then a VM/JVM can interpret that bytecode. Benefits are that compiler can perform type checks and optimizations. Portability is also achieved. Performance of interpreted bytecode lags behind compiled code.
+>To overcome this JIT compiler was introduced in 1999. JIT compiler identifies the hotspots in an application during runtime and compiles bytecode to machine instructions so that the hot methods/classes are available in machine instructions and execute pretty fast. 
+>
 >JIT - has 2 compilation modes:-
->1. C1 - client compiler - Optimized for fast start up applications and optimizes the hotspot methods early on and compiles them to machine code.
->2. C2 - server compiler - Waits longer period of time for hotspot method optimizations. The longer wait means more accurate pattern to identify hot methods and applies more aggressive optimizations. Hence, methods compiled with C2 are faster than those compiled with C1.
+>1. C1 - client compiler:- Optimized for fast start up applications and optimizes the hotspot methods early on and compiles them to machine code.
+>2. C2 - server compiler:- Waits longer period of time for hotspot method optimizations. The longer wait means more accurate patterns can be applied to identify hot methods and optimizations can be more aggressive. Hence, methods compiled with C2 are faster than those compiled with C1.
+>
+>Application running with C1 will be faster early on. While C2 compiled applications will catch up later and overtake C1. Hence, C1 should be used for short lived applications and C2 for long lived apps.
+>
+>3. Tiered Compilation:- For long lived apps, tiered compilation approach could be used. The application first starts up and executes the bytecode in interpreted mode. After a few runs C1 compiler identifies and compiles hot methods. As the methods become more hotter, they can then be compied with C2 compiler. Java 8 by default uses tiered compilation.
 
->Application running with C1 will be faster early on. While C2 compiled will catch up later and overtake. Hence, C1 should be used for short lived applications and C2 for long lived apps.
+Tiered compiliation levels are:-
+Level 0 – interpreted code.
+Level 1 – C1 compiled code with no profiling
+Level 2 – C1 compiled code with light profiling
+Level 3 – C1 compiled code with full profiling
+Level 4 – C2 compiled code (uses profile data from the previous steps)
 
->3. Tiered Compilation:- For long lived apps, tiered compilation approach could be used. THe application first starts up and runs in interpreted mode. After a few runs C1 compiler identifies and compiles hot methods. As the methods become more hotter, they can then be compied with C2 compiler.
-Java 8 by default uses tiered compilation.
-
-
-#### JVM tuning flags
-1. C1 compiler: -XX:TieredStopAtLevel=1
-2. C2 compiler: -XX:-TieredCompilation
-
->Hotspot method definition:- 
+>#### Hotspot method are determined using below two parameters:-
 >1. Invocation counter:- number of times method has been invoked.
 >2. Backedge counter:- number of times any loops in a method have branched back. Branch back means either a loop completed execution or it was cut short using a continue statement.
 
-3. Tier 4 invocation threadhold - -XX:Tier4InvocationThreshold=4000 -XX:Tier4CompilationThreshold=10000
+#### JVM JIT compiler tuning flags
+1. C1 compiler:- -XX:TieredStopAtLevel=1
+2. C2 compiler:- -XX:-TieredCompilation
+3. Tier 4 tuning flags:- -XX:Tier4InvocationThreshold=4000 -XX:Tier4CompilationThreshold=10000
 
 >Code cache - An area of native memory where compiled code is stored for future executions. If the code cache is filled up no more JIT compilation is done and the hot methods would run in slower interpreted mode.
->> In java 9, code cache is divided into three areas:
->>JVM internal code
->>Profiled (lightly optimized) code
->>Non-profiled (fully optimized) code
+> In java 9, code cache is divided into three areas:
+>1. JVM internal code
+>2. Profiled (lightly optimized) code
+>3. Non-profiled (fully optimized) code
 
-4. Code cache flag:- -XX:ReservedCodeCacheSize=<N>
+#### JVM Code cache tuning flag:- 
+-XX:ReservedCodeCacheSize=<N>
 
-
-## Garbage Collection
+#### Garbage Collection
 >Generational GC - Based on young and old generation.
 >1. Serial: -XX:+UseSerialGC
 >2. Parallel 
