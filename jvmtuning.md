@@ -1,6 +1,6 @@
-#Java Performance analysis, tuning and optimization
+## Java Performance analysis, tuning and optimization
 
-#### Command line tools
+### Command line tools and JMC gui 
 jmc - java mission control gui
 
 jcmd - command line version of jmc
@@ -37,13 +37,13 @@ This can be achieved in JMC GUI -> MBean server -> Triggers -> set trigger
 >3. Intermediate languages:- Translates program code to intermediate bytecode, then a JVM/VM can interpret that bytecode. Benefits are that compiler can perform type checks and optimizations. Portability is also achieved. Performance of interpreted bytecode lags behind compiled code.
 >To overcome this JIT was introduced in 1999. JIT compiler identifies the hotspots in an application during runtime and compiles bytecode to machine instructions so that the program can run fast.
 
-JIT - has 2 compilation modes:-
-1. C1 - client compiler - Optimized for fast start up applications and optimizes the hotspot methods early on and compiles them to machine code.
-2. C2 - server compiler - Waits longer period of time for hotspot method optimizations. The longer wait means more accurate pattern to identify hot methods and applies more aggressive optimizations. Hence, methods compiled with C2 are faster than those compiled with C1.
+>JIT - has 2 compilation modes:-
+>1. C1 - client compiler - Optimized for fast start up applications and optimizes the hotspot methods early on and compiles them to machine code.
+>2. C2 - server compiler - Waits longer period of time for hotspot method optimizations. The longer wait means more accurate pattern to identify hot methods and applies more aggressive optimizations. Hence, methods compiled with C2 are faster than those compiled with C1.
 
-Application running with C1 will be faster early on. While C2 compiled will catch up later and overtake. Hence, C1 should be used for short lived applications and C2 for long lived apps.
+>Application running with C1 will be faster early on. While C2 compiled will catch up later and overtake. Hence, C1 should be used for short lived applications and C2 for long lived apps.
 
-3. Tiered Compilation:- For long lived apps, tiered compilation approach could be used. THe application first starts up and runs in interpreted mode. After a few runs C1 compiler identifies and compiles hot methods. As the methods become more hotter, they can then be compied with C2 compiler.
+>3. Tiered Compilation:- For long lived apps, tiered compilation approach could be used. THe application first starts up and runs in interpreted mode. After a few runs C1 compiler identifies and compiles hot methods. As the methods become more hotter, they can then be compied with C2 compiler.
 Java 8 by default uses tiered compilation.
 
 
