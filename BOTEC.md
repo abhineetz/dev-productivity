@@ -7,3 +7,6 @@
 40 requests per second = 100 million requests per month
 
 400 requests per second = 1 billion requests per month
+
+## anki it
+https://github.com/sirupsen/napkin-math#numbers
